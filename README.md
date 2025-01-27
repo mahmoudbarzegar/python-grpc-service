@@ -82,15 +82,24 @@ Below is an example of a Python client communicating with the gRPC server:
 
 ```python
 import grpc
-from protos import service_pb2, service_pb2_grpc
+from django.http import JsonResponse
 
-# Connect to the gRPC server
-channel = grpc.insecure_channel('localhost:50051')
-client = service_pb2_grpc.YourServiceStub(channel)
+from .proto_generated import service_pb2_grpc,service_pb2
 
-# Call a service method
-response = client.YourMethod(service_pb2.YourRequest(param='value'))
-print(response)
+
+def create_user(request):
+    with grpc.insecure_channel('localhost:50051') as channel:
+        stub = service_pb2_grpc.MyServiceStub(channel)
+        # Example user data
+        user_request = service_pb2.CreateUserRequest(
+            username="testuser",
+            email="test@example.com",
+            password="password123"
+        )
+        response = stub.CreateUser(user_request)
+
+    return JsonResponse({'success': response.success, 'message': response.message})
+
 ```
 
 ---
@@ -99,7 +108,8 @@ print(response)
 
 ```
 ├── manage.py
-├── your_app/
+├── grpc_service
+├── myapp/
 │   ├── grpc_services.py  # gRPC service implementations
 │   ├── models.py         # Django models
 │   ├── ...
