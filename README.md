@@ -121,6 +121,12 @@ def create_user(request):
 
 ---
 
+## Test
+
+**python3 manage.py test myapp.tests.test_user.UserTestClass.test_user_creation**
+
+---
+
 ## Contributing
 
 Contributions are welcome! Feel free to submit a pull request or open an issue to suggest improvements or report bugs.
