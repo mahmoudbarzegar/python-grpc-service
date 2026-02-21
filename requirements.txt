@@ -1,5 +1,2 @@
 grpcio 
 grpcio-tools
-asgiref
-Django
-django-grpc-framework
