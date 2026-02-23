@@ -30,8 +30,8 @@ Before running the project, ensure you have the following installed:
 2. **Create a Virtual Environment**:
 
    ```bash
-   python -m venv env
-   source env/bin/activate  # On Windows, use `env\Scripts\activate`
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows, use `env\Scripts\activate`
    ```
 
 3. **Install Dependencies**:
@@ -43,7 +43,7 @@ Before running the project, ensure you have the following installed:
 4. **Compile Protocol Buffers**:
 
    ```bash
-   python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/service.proto
+   python -m grpc_tools.protoc -I./proto --python_out=./myapp/proto_generated --grpc_python_out=./myapp/proto_generated ./proto/service.proto
    ```
 
 5. **Run Migrations** (if using Django ORM):
@@ -60,15 +60,12 @@ Before running the project, ensure you have the following installed:
 ## Usage
 
 1. **Define Services in `.proto` Files**:
-
-   - Modify the `service.proto` file located in the `protos/` directory to define your gRPC services and messages.
+   - Modify the `service.proto` file located in the `proto/` directory to define your gRPC services and messages.
 
 2. **Implement Services**:
-
    - Add your gRPC service implementations in `grpc_services.py`.
 
 3. **Run the Server**:
-
    - Start the gRPC server as shown in the installation steps.
 
 4. **Test the Service**:
@@ -104,26 +101,9 @@ def create_user(request):
 
 ---
 
-## Folder Structure
-
-```
-├── manage.py
-├── grpc_service
-├── myapp/
-│   ├── grpc_services.py  # gRPC service implementations
-│   ├── models.py         # Django models
-│   ├── ...
-├── protos/
-│   ├── service.proto     # Protocol Buffers definitions
-├── requirements.txt      # Dependencies
-└── README.md
-```
-
----
-
 ## Test
 
-**python3 manage.py test myapp.tests.test_user.UserTestClass.test_user_creation**
+python3 manage.py test myapp.tests.test_user.UserTestClass.test_user_creation
 
 ---
 
