@@ -1,6 +1,8 @@
 import grpc
 import json
 
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
 
 from .proto_generated import service_pb2_grpc, service_pb2
@@ -15,26 +17,62 @@ def call_grpc(request):
     return JsonResponse({'message': response.message})
 
 
+@csrf_exempt
+@require_http_methods(["POST"])
 def create_user(request):
     try:
         data = json.loads(request.body.decode('utf-8'))
+        print("Received data:", data)
+        
+        # Validate required fields
+        username = data.get('username')
+        email = data.get('email')
+        password = data.get('password')
+
+        if not all([username, email, password]):
+            return JsonResponse({
+                'success': False, 
+                'message': 'Missing required fields'
+            }, status=400)
+        
+
+        print("I am here")
 
         with grpc.insecure_channel('localhost:50051') as channel:
+            print("gRPC recieve")
+
             stub = service_pb2_grpc.MyServiceStub(channel)
             # Example user data
             user_request = service_pb2.CreateUserRequest(
-                username=data.get('username'),
-                email=data.get('email'),
-                password=data.get('password')
+                username=username,
+                email=email,
+                password=password
 
             )
-            response = stub.CreateUser(user_request, timeout=105)
+            grpc_response = stub.CreateUser(user_request, timeout=10)
+            print("gRPC recieve", grpc_response)
 
-        return JsonResponse({'success': response.success, 'message': response.message})
 
+        print("I am here 2")
+
+        print("gRPC recieve", grpc_response)
+        return JsonResponse({
+            'success': grpc_response.success, 
+            'message': grpc_response.message
+        }, status=201 if grpc_response.success else 400)
+
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'message': 'Invalid JSON'}, status=400)
     except grpc.RpcError as e:
-        # Handle gRPC errors properly
-        return handle_grpc_error(e)
+        return JsonResponse({
+            'success': False, 
+            'message': f'gRPC error: {e.details()}'
+        }, status=500)
+    except Exception as e:
+        return JsonResponse({
+            'success': False, 
+            'message': f'Server error: {str(e)}'
+        }, status=500)
 
 
 def handle_grpc_error(error):
