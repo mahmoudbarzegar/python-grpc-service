@@ -6,9 +6,9 @@ class UserTestClass(TestCase):
         """Test POST request """
         response = self.client.post('/myapp/create-user/',
             data={
-                "username": "Mark",
-                "email": "mark@local",
-                "password": "123654"
+                "username": "mahmoud-twm-2026",
+                "email": "mahmodud-twm-2026@local.com",
+                "password": "1236549"
             }, 
             format='json',
             content_type='application/json'  # Explicitly set
