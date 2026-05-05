@@ -2,6 +2,8 @@
 
 This repository provides a basic implementation of a gRPC service using Python and Django. It demonstrates how to set up a gRPC server and integrate it with Django for building scalable and efficient communication between client and server applications.
 
+![Python gRPC Service](diagram.png)
+
 ## Features
 
 - **gRPC Server Setup**: Step-by-step configuration of a gRPC server with Django.
@@ -23,14 +25,16 @@ Before running the project, ensure you have the following installed:
 1. **Clone the Repository**:
 
    ```bash
-   git clone https://github.com/hedeshmb/python_gRPC_service.git
-   cd your-repository
+   git clone https://github.com/mahmoudbarzegar/python-grpc-service
+
+   cd python-grpc-service
    ```
 
 2. **Create a Virtual Environment**:
 
    ```bash
    python -m venv .venv
+
    source .venv/bin/activate  # On Windows, use `env\Scripts\activate`
    ```
 
