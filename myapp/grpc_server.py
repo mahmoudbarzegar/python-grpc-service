@@ -1,22 +1,25 @@
-import grpc
-import time
 import os
 import sys
-import django
-
+import time
 from concurrent import futures
+
+import django
+import grpc
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # Set Django settings manually
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "grpc_service.settings")  # Change 'my_project' to your actual project name
+os.environ.setdefault(
+    "DJANGO_SETTINGS_MODULE", "grpc_service.settings"
+)  # Change 'my_project' to your actual project name
 django.setup()
 
-proto_generated_dir = os.path.join(os.path.dirname(__file__), 'proto_generated')
+proto_generated_dir = os.path.join(os.path.dirname(__file__), "proto_generated")
 sys.path.append(proto_generated_dir)
 
-from myapp.models import UserModel
-import proto_generated.service_pb2_grpc as service_pb2_grpc
 import proto_generated.service_pb2 as service_pb2
+import proto_generated.service_pb2_grpc as service_pb2_grpc
+
+from myapp.models import UserModel
 
 
 class MyServiceServicer(service_pb2_grpc.MyServiceServicer):
@@ -40,7 +43,7 @@ def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     service_pb2_grpc.add_MyServiceServicer_to_server(MyServiceServicer(), server)
     # user_pb2_grpc.add_UserServiceServicer_to_server(UserServicer(), server)
-    server.add_insecure_port('[::]:50051')
+    server.add_insecure_port("[::]:50051")
     print("Server started on port 50051...")
     server.start()
     try:
@@ -50,5 +53,5 @@ def serve():
         server.stop(0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     serve()

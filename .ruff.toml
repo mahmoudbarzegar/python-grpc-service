@@ -7,6 +7,7 @@ exclude = [
     "**/proto_generated/**",
     ".venv",
     "__pycache__",
+    "myapp/grpc_server.py"
 ]
 
 [lint]
