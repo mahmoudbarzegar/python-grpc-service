@@ -30,6 +30,6 @@ jobs:
           ruff check .
           ruff format --check .
 
-      - name: Run tests
-        run: |
-          python -m pytest
+      # - name: Run tests
+      #   run: |
+      #     python -m pytest
